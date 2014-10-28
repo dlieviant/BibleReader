@@ -16,21 +16,35 @@ def get_collection(book_id):
     return dam_id
 
 def get_book_id(book):
-    book = book.replace(" ", "")
-    return bible_lists.bookList[book]
+    book = book.split()
+    book_id_key = ""
+    if "FIRST" in book[0] or "SECOND" in book[0] or "THIRD" in book[0]:
+        book_id_key = book[0] + book[1]
+    else:
+        book_id_key = book[0]    
+    return bible_lists.bookList[book_id_key]
+
+def get_chap_id(chap):
+    chapNums = chap.split()
+    chap_id = 0
+    for nums in chapNums:
+        chap_id = chap_id + int(nums)
+    return str(chap_id)
 
 def bible_query(book, chapter):
 
     API_KEY = "fd82d19821647fa4829c7ca160b82e6f"
     book_id = get_book_id(book)
+    chap_id = get_chap_id(chapter)
     dam_id = get_collection(book_id)
-    request = "http://dbt.io/audio/path?key="+API_KEY+"&dam_id="+dam_id+"&book_id="+book_id+"&chapter_id="+chapter+"&v=2"
+    request = "http://dbt.io/audio/path?key="+API_KEY+"&dam_id="+dam_id+"&book_id="+book_id+"&chapter_id="+chap_id+"&v=2"
     
     response = urllib2.urlopen(request)
     
     html = response.read().split('","')
+    if len(html) == 1:
+        return ""
     audiopath = "http://cloud.faithcomesbyhearing.com/mp3audiobibles2/"
-    print len(html)
     for fields in html:    
     #    print fields
         item = fields.split(":")
@@ -40,11 +54,12 @@ def bible_query(book, chapter):
             path = path[1]
     #        print path
             audiopath = audiopath+path
-            print audiopath
+    return audiopath
     
-    audio = urllib2.urlopen(audiopath)
-    bible = open("gen3.mp3", "wb")
+def audio_download(path):    
+    audio = urllib2.urlopen(path)
+    bible = open("audio/bible.mp3", "wb")
     bible.write(audio.read())
     bible.close()
     
-bible_query("SECOND CORINTHIANS", "3")
+print bible_query("SECOND CORINTHIANS", "3")
