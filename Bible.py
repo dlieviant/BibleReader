@@ -1,10 +1,10 @@
 import re
 import yaml
 import os
-import speaker
+import "../speaker"
 import urllib2
 import mpd
-from mic import Mic
+from "../mic" import Mic
 import time
 import bible_search
 import getch
