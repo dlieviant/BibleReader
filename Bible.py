@@ -6,7 +6,7 @@ import mpd
 from mic import Mic
 import time
 import bible_search
-
+# I made a change
 #WORDS = ["READ","FIRST", "SECOND", "THIRD", "BIBLE"
 #	 "GENESIS", "EXODUS", "LEVITICUS", "NUMBERS", "DEUTERONOMY", "JOSHUA",
 #	 "JUDGES", "RUTH", "SAMUEL", "KINGS", "CHRONICLES", "EZRA", "NEHEMIAH",
