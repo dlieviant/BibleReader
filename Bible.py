@@ -1,4 +1,5 @@
 import re
+import yaml
 import os
 import speaker
 import urllib2
@@ -6,7 +7,10 @@ import mpd
 from mic import Mic
 import time
 import bible_search
-# I made a change
+import getch
+import sys
+import select
+
 #WORDS = ["READ","FIRST", "SECOND", "THIRD", "BIBLE"
 #	 "GENESIS", "EXODUS", "LEVITICUS", "NUMBERS", "DEUTERONOMY", "JOSHUA",
 #	 "JUDGES", "RUTH", "SAMUEL", "KINGS", "CHRONICLES", "EZRA", "NEHEMIAH",
@@ -23,24 +27,10 @@ WORDS = ["READ", "BIBLE"]
 
 test_uri = "http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___01_Genesis_____ENGESVO2DA.mp3"
 
-def handle(text, mic, profile):
-    """
-        Responds to user-input, typically speech text, by telling a joke.
-
-        Arguments:
-        text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
-        profile -- contains information related to the user (e.g., phone number)
-    """
-
-    mic.say("Please choose a language.")
-    mic.say("Available languages are: English ... Indonesian")
-    lang = mic.activeListen()
-    print(lang)
-    time.sleep(5)
-
-    bible = BibleReader("JASPER", mic, "ENGLISH") #lang instead of "ENGLISH"
-    bible.handleForever()
+profile = yaml.safe_load(open("profile.yml", "r"))
+mic = Mic(speaker.newSpeaker(), "languagemodel_bible.lm", "dictionary_bible.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playback.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_num.dic")
+    
+ 
 
 def isValid(text):
     """
@@ -63,21 +53,34 @@ class BibleReader:
         self.client.idletimeout= None
         self.client.connect("localhost", 6600)
         self.mic = mic
-        if "INDONESIAN" in lang:
-            self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playback.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_num.dic") 
-        else:
-            self.mic = Mic(mic.speaker, "languagemodel_bible.lm", "dictionary_bible.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playback.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_num.dic")
- 
+        #if "INDONESIAN" in lang:
+        #    self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic")
+        #else:
+        #    self.mic = Mic(mic.speaker, "languagemodel_bible.lm", "dictionary_bible.dic", "languagemodel_persona.lm", "dictionary_persona.dic")
+    
 
     def handleForever(self):
-        self.mic.say("Please specify the book to read.")
-        book = self.mic.activeListen()
-        self.mic.say("Please choose the chapter.")
-        chap = self.mic.activeListen(NUMBER=True)
-        bible_search.bible_query(book, chap)
+        badInput = True
+        while badInput:
+            badInput = False
+            self.mic.say("Please specify the book to read.")
+            book = self.mic.activeListen()
+            self.mic.say("Please choose the chapter.")
+            chap = self.mic.activeListen(NUMBER=True)
+            audio = bible_search.bible_query(book, chap)
+            if book == "" or chap == "":
+                badInput = True
+                self.mic.say("I am sorry, I did not catch that. Please repeat.")
+            else:
+                audio = bible_search.bible_query(book, chap)
+                if audio == "":
+                    badInput = True
+                    self.mic.say("Cannot find chapter. Please repeat.")
+
         self.mic.say("Opening the Bible. Please wait.")
 
         self.client.clear()
+        #self.client.add(audio)
         self.client.add("file:///home/pi/jasper/client/audio/bible.mp3")
         self.client.play()
 	
@@ -87,15 +90,29 @@ class BibleReader:
             if input:
                 self.mic.say("Input detected.")
             '''
+            inputFlag = False
             try:
+		#char = getch.getch()
+                print "key input"
+                i, o, e = select.select([sys.stdin], [], [], 0)
+                for s in i:
+                    if s == sys.stdin:
+                        input = sys.stdin.read(1)
+                        inputFlag = True
+                print "voice input"
                 threshold, transcribed = self.mic.passiveListen(self.persona)
             except:
                 continue
 
-            if threshold:
+            #if threshold or char == 'j':
+            if threshold or inputFlag:
+                inputFlag = False
+		#if char == 'j':
+                #    print "manual persona activation"
                 try:
                     self.client.pause(1)
-                except:
+                except mpd.ConnectionError:
+                    self.client.disconnect()
                     self.client.connect("localhost", 6600)
                     self.client.pause(1)
         
@@ -119,7 +136,7 @@ class BibleReader:
                     book = self.mic.activeListen()
                     self.mic.say("Please choose the chapter.")
                     chap = self.mic.activeListen(NUMBER=True)
-                    bible_search.bible_query(book, chap)
+                    audio = bible_search.bible_query(book, chap)
                     self.mic.say("Opening the Bible. Please wait.") #choose another book
                     self.client.clear()
                     self.client.add("file:///home/pi/jasper/client/audio/bible.mp3")
@@ -129,3 +146,9 @@ class BibleReader:
                     self.client.play()
          
 
+mic.say("Please choose a language.")
+mic.say("Available languages are: English ... Indonesian")
+lang = mic.activeListen()
+
+bible = BibleReader("JASPER", mic, "ENGLISH") #lang instead of "ENGLISH"
+bible.handleForever()
