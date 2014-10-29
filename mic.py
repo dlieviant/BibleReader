@@ -7,7 +7,6 @@ import json
 from wave import open as open_audio
 import audioop
 import pyaudio
-import alteration
 
 
 # quirky bug where first import doesn't work
@@ -241,7 +240,7 @@ class Mic:
         if THRESHOLD == None:
             THRESHOLD = self.fetchThreshold()
 
-        self.speaker.play("../static/audio/beep_hi.wav")
+        self.speaker.play("~/jasper/static/audio/beep_hi.wav")
 
         # prepare recording stream
         audio = pyaudio.PyAudio()
@@ -271,7 +270,7 @@ class Mic:
             if average < THRESHOLD * 0.8:
                 break
 
-        self.speaker.play("../static/audio/beep_lo.wav")
+        self.speaker.play("~/jasper/static/audio/beep_lo.wav")
 
         # save the audio data
         stream.stop_stream()
@@ -297,5 +296,5 @@ class Mic:
 
     def say(self, phrase, OPTIONS=" -vdefault+m3 -p 40 -s 160 --stdout > say.wav"):
         # alter phrase before speaking
-        phrase = alteration.clean(phrase)
+        #phrase = alteration.clean(phrase)
         self.speaker.say(phrase)
