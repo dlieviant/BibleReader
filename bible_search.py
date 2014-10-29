@@ -62,4 +62,3 @@ def audio_download(path):
     bible.write(audio.read())
     bible.close()
     
-print bible_query("SECOND CORINTHIANS", "1")
