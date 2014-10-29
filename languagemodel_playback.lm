@@ -1,4 +1,4 @@
-Language model created by QuickLM on Wed Oct 22 19:01:27 EDT 2014
+Language model created by QuickLM on Wed Oct 29 13:35:38 EDT 2014
 Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
 
 The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
@@ -7,30 +7,33 @@ The code that was used to produce this language model is available in Open Sourc
 Please visit http://www.speech.cs.cmu.edu/tools/ for more information
 
 The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
-This model based on a corpus of 5 sentences and 8 words
+This model based on a corpus of 6 sentences and 9 words
 
 \data\
-ngram 1=8
-ngram 2=11
-ngram 3=7
+ngram 1=9
+ngram 2=13
+ngram 3=8
 
 \1-grams:
--0.8325 </s> -0.3010
--0.8325 <s> -0.2319
--1.2304 BIBLE -0.2319
--1.5315 CLOSE -0.2747
--1.5315 CONTINUE -0.2319
--1.5315 OPEN -0.2747
--1.5315 PAUSE -0.2319
--1.5315 STOP -0.2319
+-0.8239 </s> -0.3010
+-0.8239 <s> -0.2304
+-1.3010 BIBLE -0.2304
+-1.6021 CANCEL -0.2304
+-1.6021 CLOSE -0.2788
+-1.6021 CONTINUE -0.2304
+-1.6021 OPEN -0.2788
+-1.6021 PAUSE -0.2304
+-1.6021 STOP -0.2304
 
 \2-grams:
--1.0000 <s> CLOSE 0.0000
--1.0000 <s> CONTINUE 0.0000
--1.0000 <s> OPEN 0.0000
--1.0000 <s> PAUSE 0.0000
--1.0000 <s> STOP 0.0000
+-1.0792 <s> CANCEL 0.0000
+-1.0792 <s> CLOSE 0.0000
+-1.0792 <s> CONTINUE 0.0000
+-1.0792 <s> OPEN 0.0000
+-1.0792 <s> PAUSE 0.0000
+-1.0792 <s> STOP 0.0000
 -0.3010 BIBLE </s> -0.3010
+-0.3010 CANCEL </s> -0.3010
 -0.3010 CLOSE BIBLE 0.0000
 -0.3010 CONTINUE </s> -0.3010
 -0.3010 OPEN BIBLE 0.0000
@@ -38,6 +41,7 @@ ngram 3=7
 -0.3010 STOP </s> -0.3010
 
 \3-grams:
+-0.3010 <s> CANCEL </s>
 -0.3010 <s> CLOSE BIBLE
 -0.3010 <s> CONTINUE </s>
 -0.3010 <s> OPEN BIBLE

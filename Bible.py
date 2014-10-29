@@ -50,7 +50,7 @@ class BibleReader:
             book = self.mic.activeListen()
             self.mic.say("Please choose the chapter.")
             chap = self.mic.activeListen(NUMBER=True)
-            audio = bible_search.bible_query(book, chap)
+
             if book == "" or chap == "":
                 badInput = True
                 self.mic.say("I am sorry, I did not catch that. Please repeat.")
@@ -59,7 +59,13 @@ class BibleReader:
                 if audio == "":
                     badInput = True
                     self.mic.say("Cannot find chapter. Please repeat.")
+                else:
+                    self.mic.say("Opening" + book + " " + chap)
+                    input = self.mic.activeListen(MUSIC=True)
+                    if "CANCEL" in input:
+                        badInput = True
 
+        
         self.mic.say("Opening the Bible. Please wait.")
 
         self.client.clear()
