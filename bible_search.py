@@ -58,8 +58,8 @@ def bible_query(book, chapter):
     
 def audio_download(path):    
     audio = urllib2.urlopen(path)
-    bible = open("audio/bible.mp3", "wb")
+    bible = open("bible.mp3", "wb")
     bible.write(audio.read())
     bible.close()
     
-print bible_query("SECOND CORINTHIANS", "3")
+print bible_query("SECOND CORINTHIANS", "1")

@@ -64,13 +64,15 @@ class BibleReader:
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
                         badInput = True
+                        self.mic.say("Cancelling...")
 
         
         self.mic.say("Opening the Bible. Please wait.")
+        bible_search.audio_download(audio)
 
         self.client.clear()
         #self.client.add(audio)
-        self.client.add("file:///home/pi/jasper/client/audio/bible.mp3")
+        self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
         self.client.play()
 	
         while True:
@@ -125,7 +127,7 @@ class BibleReader:
                     audio = bible_search.bible_query(book, chap)
                     self.mic.say("Opening the Bible. Please wait.") #choose another book
                     self.client.clear()
-                    self.client.add("file:///home/pi/jasper/client/audio/bible.mp3")
+                    self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
                     self.client.play()
                 else:
                     self.mic.say("Pardon?")
