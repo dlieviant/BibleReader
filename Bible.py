@@ -70,7 +70,7 @@ class BibleReader:
                     badInput = True
                     self.say("repeat")
                 else:
-                    self.mic.say("Opening" + book + " " + chap)
+                    self.mic.say("Opening " + book + " " + chap)
                     self.say("prompt")
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
@@ -104,12 +104,13 @@ class BibleReader:
                     if s == sys.stdin:
                         input = sys.stdin.read(1)
                         inputFlag = True
-                if not inputFlag:
-                    threshold, transcribed = self.mic.passiveListen(self.persona)
+                #if not inputFlag:
+                #    threshold, transcribed = self.mic.passiveListen(self.persona)
+		threshold = False 
             except:
                 continue
 
-            if threshold or inputFlag:
+            if inputFlag or threshold:
                 inputFlag = False
                 try:
                     self.client.pause(1)
