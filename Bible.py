@@ -15,7 +15,7 @@ WORDS = ["READ", "BIBLE"]
 
 profile = yaml.safe_load(open("profile.yml", "r"))
 mic = Mic(speaker.newSpeaker(), "languagemodel_bible.lm", "dictionary_bible.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playback.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_num.dic")
-    
+mic.say("Welcome to Fig, the interactive Bible.")
  
 
 def isValid(text):
@@ -38,7 +38,7 @@ class BibleReader:
         self.client.idletimeout= None
         self.client.connect("localhost", 6600)
         if "INDONESIAN" in lang:
-            self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playindo.lm", dictd_music="dictionary_playindo.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_numindo.dic")
+            self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playindo.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_numindo.dic")
             self.say = self.sayInd
         else:
             self.mic = mic
@@ -48,43 +48,50 @@ class BibleReader:
         self.mic.say(bible_lists.utterances[word])
         
     def sayInd(self, word):
-        filename = word + "_indo.wav"
+        filename = "audio/" + word + "_indo.wav"
+        #filename = "hi.wav"
         os.system("aplay -D hw:1,0 " + filename)
     
     def lookupBible(self, lang):
         badInput = True
         while badInput:
             badInput = False
-            self.say(self, "book")
+            self.say("book")
             book = self.mic.activeListen()
-            self.say(self, "chapter")
+            self.say("chapter")
             chap = self.mic.activeListen(NUMBER=True)
 
             if book == "" or chap == "":
                 badInput = True
-                self.say(self, "pardon")
+                self.say("pardon")
             else:
                 audio = bible_search.bible_query(book, chap, lang)
                 if audio == "":
                     badInput = True
-                    self.mic.say(self, "repeat")
+                    self.say("repeat")
                 else:
                     self.mic.say("Opening" + book + " " + chap)
-                    self.say(self, "prompt")
+                    self.say("prompt")
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
                         badInput = True
-                        self.say(self, "cancel")
+                        self.say("cancel")
                     else:
                         return audio
 
     def handleForever(self):
-        audio = self.lookupBible(self, self.lang)
+        audio = self.lookupBible(self.lang)
         
-        self.say(self, "opening")
+        self.say("opening")
         bible_search.audio_download(audio)
 
-        self.client.clear()
+        try:
+            self.client.clear()
+        except mpd.ConnectionError:
+            self.client.disconnect()
+            self.client.connect("localhost", 6600)
+            self.client.clear()
+ 
         self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
         self.client.play()
 	
@@ -113,29 +120,35 @@ class BibleReader:
         
                 input = self.mic.activeListen(MUSIC=True)
                 if "CLOSE BIBLE" in input:
-                    self.say(self, "closing")
+                    self.say("closing")
                     self.client.stop()
                     self.client.close()
                     self.client.disconnect()
                     return
                 elif "STOP" in input:
-                    self.say(self, "stop")
+                    self.say("stop")
                     self.client.stop()
                 elif "PAUSE" in input:
-                    self.say(self, "pause")
+                    self.say("pause")
                 elif "CONTINUE" in input:
-                    self.say(self, "continue")
+                    self.say("continuing")
                     self.client.pause(0)
                 elif "OPEN" in input:
-                    audio = self.lookupBible(self, self.lang)
-                    self.say(self, "opening") #choose another book
+                    audio = self.lookupBible(self.lang)
+                    self.say("opening") #choose another book
                     
-                    self.client.clear()
+                    try:
+                        self.client.clear()
+                    except mpd.ConnectionError:
+                        self.client.disconnect()
+                        self.client.connect("localhost", 6600)
+                        self.client.clear()
+
                     bible_search.audio_download(audio)
                     self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
                     self.client.play()
                 else:
-                    self.say(self, "pardon")
+                    self.say("pardon")
                     self.client.play()
          
 
