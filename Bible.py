@@ -7,6 +7,7 @@ import mpd
 from mic import Mic
 import time
 import bible_search
+import bible_lists
 import sys
 import select
 
@@ -31,66 +32,72 @@ class BibleReader:
     
     def __init__(self, PERSONA, mic, lang):
         self.persona = PERSONA
+        self.lang = lang
         self.client = mpd.MPDClient()
         self.client.timeout = None
         self.client.idletimeout= None
         self.client.connect("localhost", 6600)
-        self.mic = mic
-        #if "INDONESIAN" in lang:
-        #    self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic")
-        #else:
-        #    self.mic = Mic(mic.speaker, "languagemodel_bible.lm", "dictionary_bible.dic", "languagemodel_persona.lm", "dictionary_persona.dic")
+        if "INDONESIAN" in lang:
+            self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playindo.lm", dictd_music="dictionary_playindo.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_numindo.dic")
+            self.say = self.sayInd
+        else:
+            self.mic = mic
+            self.say = self.sayEng
     
-
-    def handleForever(self):
+    def sayEng(self, word):
+        self.mic.say(bible_lists.utterances[word])
+        
+    def sayInd(self, word):
+        filename = word + "_indo.wav"
+        os.system("aplay -D hw:1,0 " + filename)
+    
+    def lookupBible(self, lang):
         badInput = True
         while badInput:
             badInput = False
-            self.mic.say("Please specify the book to read.")
+            self.say(self, "book")
             book = self.mic.activeListen()
-            self.mic.say("Please choose the chapter.")
+            self.say(self, "chapter")
             chap = self.mic.activeListen(NUMBER=True)
 
             if book == "" or chap == "":
                 badInput = True
-                self.mic.say("I am sorry, I did not catch that. Please repeat.")
+                self.say(self, "pardon")
             else:
-                audio = bible_search.bible_query(book, chap)
+                audio = bible_search.bible_query(book, chap, lang)
                 if audio == "":
                     badInput = True
-                    self.mic.say("Cannot find chapter. Please repeat.")
+                    self.mic.say(self, "repeat")
                 else:
                     self.mic.say("Opening" + book + " " + chap)
+                    self.say(self, "prompt")
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
                         badInput = True
-                        self.mic.say("Cancelling...")
+                        self.say(self, "cancel")
+                    else:
+                        return audio
 
+    def handleForever(self):
+        audio = self.lookupBible(self, self.lang)
         
-        self.mic.say("Opening the Bible. Please wait.")
+        self.say(self, "opening")
         bible_search.audio_download(audio)
 
         self.client.clear()
-        #self.client.add(audio)
         self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
         self.client.play()
 	
         while True:
-            '''
-            input = self.mic.activeListen()
-            if input:
-                self.mic.say("Input detected.")
-            '''
             inputFlag = False
+            
             try:
-                print "key input"
                 i, o, e = select.select([sys.stdin], [], [], 0)
                 for s in i:
                     if s == sys.stdin:
                         input = sys.stdin.read(1)
                         inputFlag = True
                 if not inputFlag:
-                    print "voice input"
                     threshold, transcribed = self.mic.passiveListen(self.persona)
             except:
                 continue
@@ -106,37 +113,35 @@ class BibleReader:
         
                 input = self.mic.activeListen(MUSIC=True)
                 if "CLOSE BIBLE" in input:
-                    self.mic.say("Closing the Bible")
+                    self.say(self, "closing")
                     self.client.stop()
                     self.client.close()
                     self.client.disconnect()
                     return
                 elif "STOP" in input:
-                    self.mic.say("Stopping reading.")
+                    self.say(self, "stop")
                     self.client.stop()
                 elif "PAUSE" in input:
-                    self.mic.say("Pausing reading.")
+                    self.say(self, "pause")
                 elif "CONTINUE" in input:
-                    self.mic.say("Continue reading.")
+                    self.say(self, "continue")
                     self.client.pause(0)
                 elif "OPEN" in input:
-                    self.mic.say("Please specify the book to read.")
-                    book = self.mic.activeListen()
-                    self.mic.say("Please choose the chapter.")
-                    chap = self.mic.activeListen(NUMBER=True)
-                    audio = bible_search.bible_query(book, chap)
-                    self.mic.say("Opening the Bible. Please wait.") #choose another book
+                    audio = self.lookupBible(self, self.lang)
+                    self.say(self, "opening") #choose another book
+                    
                     self.client.clear()
+                    bible_search.audio_download(audio)
                     self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
                     self.client.play()
                 else:
-                    self.mic.say("Pardon?")
+                    self.say(self, "pardon")
                     self.client.play()
          
 
 mic.say("Please choose a language.")
 mic.say("Available languages are: English ... Indonesian")
-lang = mic.activeListen()
-
-bible = BibleReader("JASPER", mic, "ENGLISH") #lang instead of "ENGLISH"
+lang = mic.activeListen(MUSIC=True)
+time.sleep(2)
+bible = BibleReader("JASPER", mic, lang) #lang instead of "ENGLISH"
 bible.handleForever()

@@ -8,21 +8,35 @@ Created on Fri Oct 03 14:10:58 2014
 import urllib2
 import bible_lists
 
-def get_collection(book_id):
+def get_collection(book_id, isIndo):
     if book_id in bible_lists.ntList:
-        dam_id = "ENGESVN2DA"
+        if isIndo:
+            dam_id = "INZNTVN2DA"
+        else:
+            dam_id = "ENGESVN2DA"
     else:
-        dam_id = "ENGESVO2DA"
+        if isIndo:
+            dam_id = "INZNTVO2DA"
+        else:
+            dam_id = "ENGESVO2DA"
     return dam_id
 
-def get_book_id(book):
-    book = book.split()
+def get_book_id(book, isIndo):
+    bookname = book.split()
     book_id_key = ""
-    if "FIRST" in book[0] or "SECOND" in book[0] or "THIRD" in book[0]:
-        book_id_key = book[0] + book[1]
+    if isIndo:
+        book_list = bible_lists.bookListID
+        if "SATU" in bookname[0] or "DUA" in bookname[0] or "TIGA" in bookname[0] or "KIDUNG" in bookname[0] or "HAKIM" in bookname[0] or "KISAH" in bookname[0]:
+            book_id_key = book.replace(" ", "")
+        else:
+            book_id_key = bookname[0]    
     else:
-        book_id_key = book[0]    
-    return bible_lists.bookList[book_id_key]
+        book_list = bible_lists.bookListEN
+        if "FIRST" in bookname[0] or "SECOND" in bookname[0] or "THIRD" in bookname[0] or "SONGS" in bookname[0]:
+            book_id_key = book.replace(" ", "")
+        else:
+            book_id_key = bookname[0]    
+    return book_list[book_id_key]
 
 def get_chap_id(chap):
     chapNums = chap.split()
@@ -31,12 +45,14 @@ def get_chap_id(chap):
         chap_id = chap_id + int(nums)
     return str(chap_id)
 
-def bible_query(book, chapter):
-
+def bible_query(book, chapter, lang):
+    isIndo = False
+    if "INDONESIAN" in lang:
+        isIndo = True
     API_KEY = "fd82d19821647fa4829c7ca160b82e6f"
-    book_id = get_book_id(book)
+    book_id = get_book_id(book, isIndo)
     chap_id = get_chap_id(chapter)
-    dam_id = get_collection(book_id)
+    dam_id = get_collection(book_id, isIndo)
     request = "http://dbt.io/audio/path?key="+API_KEY+"&dam_id="+dam_id+"&book_id="+book_id+"&chapter_id="+chap_id+"&v=2"
     
     response = urllib2.urlopen(request)

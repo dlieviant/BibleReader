@@ -1,0 +1,53 @@
+Language model created by QuickLM on Thu Oct 30 19:39:41 EDT 2014
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 6 sentences and 9 words
+
+\data\
+ngram 1=9
+ngram 2=13
+ngram 3=8
+
+\1-grams:
+-0.8239 </s> -0.3010
+-0.8239 <s> -0.2304
+-1.3010 ALKITAB -0.2304
+-1.6021 BACA -0.2788
+-1.6021 BATAL -0.2304
+-1.6021 BERHENTI -0.2304
+-1.6021 LANJUT -0.2304
+-1.6021 SEBENTAR -0.2304
+-1.6021 TUTUP -0.2788
+
+\2-grams:
+-1.0792 <s> BACA 0.0000
+-1.0792 <s> BATAL 0.0000
+-1.0792 <s> BERHENTI 0.0000
+-1.0792 <s> LANJUT 0.0000
+-1.0792 <s> SEBENTAR 0.0000
+-1.0792 <s> TUTUP 0.0000
+-0.3010 ALKITAB </s> -0.3010
+-0.3010 BACA ALKITAB 0.0000
+-0.3010 BATAL </s> -0.3010
+-0.3010 BERHENTI </s> -0.3010
+-0.3010 LANJUT </s> -0.3010
+-0.3010 SEBENTAR </s> -0.3010
+-0.3010 TUTUP ALKITAB 0.0000
+
+\3-grams:
+-0.3010 <s> BACA ALKITAB
+-0.3010 <s> BATAL </s>
+-0.3010 <s> BERHENTI </s>
+-0.3010 <s> LANJUT </s>
+-0.3010 <s> SEBENTAR </s>
+-0.3010 <s> TUTUP ALKITAB
+-0.3010 BACA ALKITAB </s>
+-0.3010 TUTUP ALKITAB </s>
+
+\end\
