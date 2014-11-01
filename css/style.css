@@ -851,7 +851,7 @@
 			input[type="reset"].special:hover,
 			input[type="button"].special:hover,
 			.button.special:hover {
-				background-color: #5ed0b1;
+				background-color: #838c09;
 			}
 
 			input[type="submit"].special:active,
@@ -959,7 +959,7 @@
 			}
 
 			#header > header p {
-				color: #d1f1e9;
+				color: #f6ad41;
 				font-style: italic;
 				margin: 1em 0 0 0;
 			}
@@ -977,7 +977,7 @@
 			}
 
 				#header > footer .icons li a {
-					color: #b6e9dc;
+					color: #6ca534;
 				}
 
 		#header > nav ul {
@@ -987,7 +987,7 @@
 		}
 
 			#header > nav ul li {
-				border-top: solid 2px #5ccfb0;
+				border-top: solid 2px #818b08;
 				display: block;
 				padding: 0;
 			}
