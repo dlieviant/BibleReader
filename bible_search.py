@@ -36,7 +36,7 @@ def get_book_id(book, isIndo):
             book_id_key = book.replace(" ", "")
         else:
             book_id_key = bookname[0]    
-    return book_list[book_id_key]
+    return book_id_key, book_list[book_id_key]
 
 def get_chap_id(chap):
     chapNums = chap.split()
@@ -45,11 +45,13 @@ def get_chap_id(chap):
         chap_id = chap_id + int(nums)
     return str(chap_id)
 
-def bible_query(book_id, chap_id, lang):
+def bible_query(book, chapter, lang):
     isIndo = False
     if "INDONESIAN" in lang:
         isIndo = True
     API_KEY = "fd82d19821647fa4829c7ca160b82e6f"
+    book_name, book_id = get_book_id(book, isIndo)
+    chap_id = get_chap_id(chapter)
     dam_id = get_collection(book_id, isIndo)
     request = "http://dbt.io/audio/path?key="+API_KEY+"&dam_id="+dam_id+"&book_id="+book_id+"&chapter_id="+chap_id+"&v=2"
     
@@ -68,7 +70,7 @@ def bible_query(book_id, chap_id, lang):
             path = path[1]
     #        print path
             audiopath = audiopath+path
-    return audiopath
+    return book_name, chap_id, audiopath
     
 def audio_download(path):    
     audio = urllib2.urlopen(path)
