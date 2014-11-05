@@ -45,13 +45,11 @@ def get_chap_id(chap):
         chap_id = chap_id + int(nums)
     return str(chap_id)
 
-def bible_query(book, chapter, lang):
+def bible_query(book_id, chap_id, lang):
     isIndo = False
     if "INDONESIAN" in lang:
         isIndo = True
     API_KEY = "fd82d19821647fa4829c7ca160b82e6f"
-    book_id = get_book_id(book, isIndo)
-    chap_id = get_chap_id(chapter)
     dam_id = get_collection(book_id, isIndo)
     request = "http://dbt.io/audio/path?key="+API_KEY+"&dam_id="+dam_id+"&book_id="+book_id+"&chapter_id="+chap_id+"&v=2"
     

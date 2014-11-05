@@ -58,8 +58,10 @@ class BibleReader:
             badInput = False
             self.say("book")
             book = self.mic.activeListen()
+            book = bible_search.get_book_id(book)
             self.say("chapter")
             chap = self.mic.activeListen(NUMBER=True)
+            chap = bible_search.get_chap_id(chap)
 
             if book == "" or chap == "":
                 badInput = True
