@@ -54,12 +54,10 @@ def bible_query(book, chapter, lang):
     chap_id = get_chap_id(chapter)
     dam_id = get_collection(book_id, isIndo)
     request = "http://dbt.io/audio/path?key="+API_KEY+"&dam_id="+dam_id+"&book_id="+book_id+"&chapter_id="+chap_id+"&v=2"
-    
     response = urllib2.urlopen(request)
-    
     html = response.read().split('","')
     if len(html) == 1:
-        return ""
+        return book_name, chap_id, ""
     audiopath = "http://cloud.faithcomesbyhearing.com/mp3audiobibles2/"
     for fields in html:    
     #    print fields
@@ -77,4 +75,3 @@ def audio_download(path):
     bible = open("bible.mp3", "wb")
     bible.write(audio.read())
     bible.close()
-    
