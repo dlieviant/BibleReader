@@ -37,8 +37,10 @@ class BibleReader:
         self.client.timeout = None
         self.client.idletimeout= None
         self.client.connect("localhost", 6600)
+        #dictionary = bible_lists.dictList[lang]
+        #self.mic = Mic(mic.speaker, "languagemodel_bible.lm", dictionary[0], "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music=dictionary[1], lmd_num="languagemodel_num.lm", dictd_num=dictionary[2])
         if "INDONESIAN" in lang:
-            self.mic = Mic(mic.speaker, "languagemodel_indo.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playindo.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_numindo.dic")
+            self.mic = Mic(mic.speaker, "languagemodel_bible.lm", "dictionary_indo.dic", "languagemodel_persona.lm", "dictionary_persona.dic", lmd_music="languagemodel_playback.lm", dictd_music="dictionary_playindo.dic", lmd_num="languagemodel_num.lm", dictd_num="dictionary_numindo.dic")
             self.say = self.sayInd
         else:
             self.mic = mic
@@ -51,6 +53,10 @@ class BibleReader:
         filename = "audio/" + word + "_indo.wav"
         #filename = "hi.wav"
         os.system("aplay -D hw:1,0 " + filename)
+        
+#    def say(self, word, lang):
+#        filename = "audio/" + lang + "/" + word + ".wav"
+#        os.system("aplay -D hw:1,0 " + filename)
     
     def lookupBible(self, lang):
         badInput = True
