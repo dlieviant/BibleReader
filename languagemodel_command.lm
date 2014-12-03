@@ -1,0 +1,77 @@
+Language model created by QuickLM on Tue Dec  2 16:35:19 EST 2014
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 10 sentences and 16 words
+
+\data\
+ngram 1=16
+ngram 2=24
+ngram 3=14
+
+\1-grams:
+-0.8325 </s> -0.3010
+-0.8325 <s> -0.2319
+-1.8325 BIBLE -0.2319
+-1.8325 BOOK -0.2319
+-1.8325 BOOKS -0.2319
+-1.8325 CHANGE -0.2946
+-1.8325 CLOSE -0.2319
+-1.8325 COMMANDS -0.2319
+-1.8325 ENGLISH -0.2319
+-1.8325 INDONESIAN -0.2319
+-1.8325 LANGUAGE -0.2319
+-1.8325 LIST -0.2946
+-1.8325 NO -0.2319
+-1.8325 READ -0.2946
+-1.8325 RECOMMEND -0.2946
+-1.8325 YES -0.2319
+
+\2-grams:
+-1.3010 <s> CHANGE 0.0000
+-1.3010 <s> CLOSE 0.0000
+-1.3010 <s> COMMANDS 0.0000
+-1.3010 <s> ENGLISH 0.0000
+-1.3010 <s> INDONESIAN 0.0000
+-1.3010 <s> LIST 0.0000
+-1.3010 <s> NO 0.0000
+-1.3010 <s> READ 0.0000
+-1.3010 <s> RECOMMEND 0.0000
+-1.3010 <s> YES 0.0000
+-0.3010 BIBLE </s> -0.3010
+-0.3010 BOOK </s> -0.3010
+-0.3010 BOOKS </s> -0.3010
+-0.3010 CHANGE LANGUAGE 0.0000
+-0.3010 CLOSE </s> -0.3010
+-0.3010 COMMANDS </s> -0.3010
+-0.3010 ENGLISH </s> -0.3010
+-0.3010 INDONESIAN </s> -0.3010
+-0.3010 LANGUAGE </s> -0.3010
+-0.3010 LIST BOOKS 0.0000
+-0.3010 NO </s> -0.3010
+-0.3010 READ BIBLE 0.0000
+-0.3010 RECOMMEND BOOK 0.0000
+-0.3010 YES </s> -0.3010
+
+\3-grams:
+-0.3010 <s> CHANGE LANGUAGE
+-0.3010 <s> CLOSE </s>
+-0.3010 <s> COMMANDS </s>
+-0.3010 <s> ENGLISH </s>
+-0.3010 <s> INDONESIAN </s>
+-0.3010 <s> LIST BOOKS
+-0.3010 <s> NO </s>
+-0.3010 <s> READ BIBLE
+-0.3010 <s> RECOMMEND BOOK
+-0.3010 <s> YES </s>
+-0.3010 CHANGE LANGUAGE </s>
+-0.3010 LIST BOOKS </s>
+-0.3010 READ BIBLE </s>
+-0.3010 RECOMMEND BOOK </s>
+
+\end\
