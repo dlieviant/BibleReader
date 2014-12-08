@@ -37,6 +37,8 @@ class BibleReader:
     def __init__(self, PERSONA, mic, lang):
         self.persona = PERSONA
         self.lang = lang
+        self.bookName = ""
+        self.chapNum = ""
         self.client = mpd.MPDClient()
         self.client.timeout = None
         self.client.idletimeout= None
@@ -87,8 +89,11 @@ class BibleReader:
                         badInput = True
                         self.say("cancel")
                     else:
-                        return audio
+                        return book, chap, audio
 
+    def nextBook(self, book):
+        return bible_lists.nextList[book]   
+    
     def handleForever(self):
         
         self.say("opening")
@@ -147,7 +152,7 @@ class BibleReader:
                     self.say("continuing")
                     self.client.pause(0)
                 elif "OPEN" in input:
-                    audio = self.lookupBible(self.lang)
+                    self.bookName, self.chapNum, audio = self.lookupBible(self.lang)
                     self.say("opening") #choose another book
                     
                     try:
@@ -166,11 +171,18 @@ class BibleReader:
 
             if finishedFlag:
                 finishedFlag = False
-                self.mic.say("Would you like to read another book?")
+                self.mic.say("To continue to next chapter, say continue")
+                self.mic.say("Otherwise, say close")
                 input = self.mic.activeListen(MUSIC=True)
                 
-                if "READ" in input:
-                    audio = self.lookupBible(self.lang)
+                if "CONTINUE" in input:
+                    nextChap = str(int(self.chapNum) + 1)
+                    self.bookName, self.chapNum, audio = bible_search.bible_query(self.bookName, nextChap, self.lang)
+                    if audio == "":
+                        #go to next book
+                        self.bookName = self.nextBook(self.bookName)
+                        nextChap = "1"
+                        self.bookName, self.chapNum, audio = bible_search.bible_query(self.bookName, nextChap, self.lang)
                     self.say("opening") #choose another book
                     
                     try:
@@ -222,7 +234,7 @@ while True:
             bible.handleForever()
     elif "READ BIBLE" in command:
         bible = BibleReader("JASPER", mic, lang)
-        audio = bible.lookupBible(lang)
+        bible.bookName, bible.chapNum, audio = bible.lookupBible(lang)
         bible_search.audio_download(audio)
         bible.handleForever()
     elif "CLOSE" in command:
