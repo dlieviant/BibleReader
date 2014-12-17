@@ -33,7 +33,7 @@ class Mic:
             dictd_persona -- filename of the 'Persona' dictionary (.dic)
         """
         self.speaker = speaker
-        hmdir = "/usr/local/share/pocketsphinx/model/hmm/en_US/hub4wsj_sc_8k"
+        hmdir = "/usr/local/share/pocketsphinx/model/hmm/en_US/hub4wsj_sc_8kadapt"
 
         if lmd_music and dictd_music:
             self.speechRec_music = ps.Decoder(hmm = hmdir, lm = lmd_music, dict = dictd_music)
