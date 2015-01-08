@@ -69,8 +69,10 @@ class BibleReader:
         while badInput:
             badInput = False
             self.say("book")
+            time.sleep(0.2)
             book = self.mic.activeListen()
             self.say("chapter")
+            time.sleep(0.2)
             chap = self.mic.activeListen(NUMBER=True)
 
             if book == "" or chap == "":
@@ -84,6 +86,7 @@ class BibleReader:
                 else:
                     self.mic.say("Opening " + book + " " + chap)
                     self.say("prompt")
+                    time.sleep(0.2)
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
                         badInput = True
@@ -107,6 +110,7 @@ class BibleReader:
  
         self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
         self.client.play()
+        isPlaying = True
 	
         while True:
             inputFlag = False
@@ -135,6 +139,7 @@ class BibleReader:
                     self.client.disconnect()
                     self.client.connect("localhost", 6600)
                     self.client.pause(1)
+                    time.sleep(0.1)
         
                 input = self.mic.activeListen(MUSIC=True)
                 if "CLOSE BIBLE" in input:
@@ -146,11 +151,14 @@ class BibleReader:
                 elif "STOP" in input:
                     self.say("stop")
                     self.client.stop()
+                    isPlaying = False
                 elif "PAUSE" in input:
                     self.say("pause")
+                    isPlaying = False
                 elif "CONTINUE" in input:
                     self.say("continuing")
                     self.client.pause(0)
+                    isPlaying = True
                 elif "OPEN" in input:
                     self.bookName, self.chapNum, audio = self.lookupBible(self.lang)
                     self.say("opening") #choose another book
@@ -165,9 +173,11 @@ class BibleReader:
                     bible_search.audio_download(audio)
                     self.client.add("file:///home/pi/jasper/client/BibleReader/bible.mp3")
                     self.client.play()
+                    isPlaying = True
                 else:
                     self.say("pardon")
-                    self.client.play()
+                    if isPlaying:
+                        self.client.play()
 
             if finishedFlag:
                 finishedFlag = False
