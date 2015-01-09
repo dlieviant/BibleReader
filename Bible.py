@@ -69,10 +69,8 @@ class BibleReader:
         while badInput:
             badInput = False
             self.say("book")
-            time.sleep(0.2)
             book = self.mic.activeListen()
             self.say("chapter")
-            time.sleep(0.2)
             chap = self.mic.activeListen(NUMBER=True)
 
             if book == "" or chap == "":
@@ -86,7 +84,6 @@ class BibleReader:
                 else:
                     self.mic.say("Opening " + book + " " + chap)
                     self.say("prompt")
-                    time.sleep(0.2)
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
                         badInput = True
@@ -139,8 +136,8 @@ class BibleReader:
                     self.client.disconnect()
                     self.client.connect("localhost", 6600)
                     self.client.pause(1)
-                    time.sleep(0.1)
-        
+                
+                time.sleep(0.1) 
                 input = self.mic.activeListen(MUSIC=True)
                 if "CLOSE BIBLE" in input:
                     self.say("closing")
@@ -220,7 +217,6 @@ commandList = ["Read bible", "List books", "Recommend book", "Change language", 
 
 while True:
     mic.say("How can I be of service?")
-    time.sleep(0.1)
     command = mic.activeListen()
     if "COMMAND" in command:
         mic.say("Available commands are")

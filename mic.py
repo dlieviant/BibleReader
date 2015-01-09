@@ -110,7 +110,7 @@ class Mic:
         lastN = [i for i in range(20)]
 
         # calculate the long run average, and thereby the proper threshold
-        for i in range(0, RATE / CHUNK * THRESHOLD_TIME):
+        for i in range(0, max(1, (RATE * THRESHOLD_TIME) / CHUNK)):
 
             data = stream.read(CHUNK)
             frames.append(data)
@@ -134,7 +134,7 @@ class Mic:
         THRESHOLD_MULTIPLIER = 1.8
         AUDIO_FILE = "passive.wav"
         RATE = 16000
-        CHUNK = 1024
+        CHUNK = 4000
 
         # number of seconds to allow to establish threshold
         THRESHOLD_TIME = 1
@@ -156,7 +156,7 @@ class Mic:
         lastN = [i for i in range(30)]
 
         # calculate the long run average, and thereby the proper threshold
-        for i in range(0, RATE / CHUNK * THRESHOLD_TIME):
+        for i in range(0, max(1, (RATE * THRESHOLD_TIME) / CHUNK)):
 
             data = stream.read(CHUNK)
             frames.append(data)
@@ -176,7 +176,7 @@ class Mic:
         didDetect = False
 
         # start passively listening for disturbance above threshold
-        for i in range(0, RATE / CHUNK * LISTEN_TIME):
+        for i in range(0, max(1, (RATE * THRESHOLD_TIME) / CHUNK)):
 
             data = stream.read(CHUNK)
             frames.append(data)
@@ -196,7 +196,7 @@ class Mic:
 
         # otherwise, let's keep recording for few seconds and save the file
         DELAY_MULTIPLIER = 1
-        for i in range(0, RATE / CHUNK * DELAY_MULTIPLIER):
+        for i in range(0, max(1, (RATE * THRESHOLD_TIME) / CHUNK)):
 
             data = stream.read(CHUNK)
             frames.append(data)
@@ -255,7 +255,7 @@ class Mic:
         # generation
         lastN = [THRESHOLD * 1.2 for i in range(30)]
 
-        for i in range(0, RATE / CHUNK * LISTEN_TIME):
+        for i in range(0, max(1, (RATE * LISTEN_TIME) / CHUNK)):
 
             data = stream.read(CHUNK)
             frames.append(data)
