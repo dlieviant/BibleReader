@@ -173,17 +173,22 @@ nextList = dict(GENESIS="EXODUS",
                 JUDE="REVELATIONS",
                 REVELATIONS="GENESIS")
                 
-utterances = dict(book="Please specify the book to read.",
+utterances = dict(welcome="Welcome to Fig, the interactive bible.",
+                  prompt="How can I be of service?",
+                  book="Please specify the book to read.",
                   chapter="Please choose the chapter.",
                   repeat="Cannot find chapter. Please repeat.",
                   pardon="Pardon?",
-                  prompt="To cancel, say cancel. Otherwise, say continue.",
+                  confirm="To cancel, say cancel. Otherwise, say continue.",
                   cancel="Cancelling...",
                   opening="Opening the Bible. Please wait.",
                   closing="Closing the Bible",
                   stop="Stopping reading.",
                   pause="Pausing reading.",
-                  continuing="Continue reading.")                
+                  continuing="Continue reading.",
+                  nextchap="To continue to next chapter, say continue. Otherwise, say close.",
+                  changelang="Please choose a language.",
+                  end="Thank you for using Fig.")                
                 
 #dictList = dict(ENGLISH=["dictionary_bible.dic", "dictionary_playback.dic", "dictionary_num.dic"],
 #                INDONESIAN=["dictionary_indo.dic", "dictionary_playindo.dic", "dictionary_numindo.dic"])                
