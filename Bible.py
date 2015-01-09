@@ -19,7 +19,6 @@ config.close()
 
 profile = yaml.safe_load(open("profile.yml", "r"))
 mic = Mic(speaker.newSpeaker(), "languagemodel_command.lm", "dictionary_command.dic", "languagemodel_persona.lm", "dictionary_persona.dic")
-mic.say("Welcome to Fig, the interactive Bible.")
  
 
 def isValid(text):
@@ -83,7 +82,7 @@ class BibleReader:
                     self.say("repeat")
                 else:
                     self.mic.say("Opening " + book + " " + chap)
-                    self.say("prompt")
+                    self.say("confirm")
                     input = self.mic.activeListen(MUSIC=True)
                     if "CANCEL" in input:
                         badInput = True
@@ -208,6 +207,9 @@ class BibleReader:
 
 commandList = ["Read bible", "List books", "Recommend book", "Change language", "Close"]
 
+bible = BibleReader("JASPER", mic, lang) 
+mic.say("Welcome to Fig, the interactive Bible.")
+
 while True:
     mic.say("How can I be of service?")
     time.sleep(0.1)
@@ -219,6 +221,7 @@ while True:
     elif "CHANGE LANGUAGE" in command:
         mic.say("Please choose a language")
         lang = mic.activeListen()
+        bible = BibleReader("JASPER", mic, lang) 
         mic.say("Language changed to " + lang)
     elif "LIST BOOK" in command:
         mic.say("Available books are Genesis ... Exodus ... Leviticus") #example, needs revision
@@ -230,10 +233,8 @@ while True:
             book, chap, audio = bible_search.bible_query("JOHN", "3", lang)
             mic.say("Opening John 3")
             bible_search.audio_download(audio)
-            bible = BibleReader("JASPER", mic, lang) 
             bible.handleForever()
     elif "READ BIBLE" in command:
-        bible = BibleReader("JASPER", mic, lang)
         bible.bookName, bible.chapNum, audio = bible.lookupBible(lang)
         bible_search.audio_download(audio)
         bible.handleForever()
