@@ -7,6 +7,7 @@ import json
 from wave import open as open_audio
 import audioop
 import pyaudio
+import bible_lists
 
 
 # quirky bug where first import doesn't work
@@ -298,3 +299,10 @@ class Mic:
         # alter phrase before speaking
         #phrase = alteration.clean(phrase)
         self.speaker.say(phrase)
+
+    def speak(self, phrase, lang):
+        if "INDONESIAN" in lang:
+            filename = "audio/" + phrase + "_indo.wav"
+            os.system("aplay -D hw:1,0 " + filename)
+        else:
+            self.say(bible_lists.utterances[phrase])

@@ -175,6 +175,9 @@ nextList = dict(GENESIS="EXODUS",
                 
 utterances = dict(welcome="Welcome to Fig, the interactive bible.",
                   prompt="How can I be of service?",
+                  command="Available commands are: Read bible, List books, Recommend book, Change language, Close",
+                  listbook="Available books are Genesis ... Exodus ... Leviticus",
+                  recommend="I recommend reading John 3. Is that okay?",
                   book="Please specify the book to read.",
                   chapter="Please choose the chapter.",
                   repeat="Cannot find chapter. Please repeat.",
@@ -188,8 +191,9 @@ utterances = dict(welcome="Welcome to Fig, the interactive bible.",
                   continuing="Continue reading.",
                   nextchap="To continue to next chapter, say continue. Otherwise, say close.",
                   changelang="Please choose a language.",
+                  langchange="Language changed to English",
                   end="Thank you for using Fig.")                
                 
-#dictList = dict(ENGLISH=["dictionary_bible.dic", "dictionary_playback.dic", "dictionary_num.dic"],
-#                INDONESIAN=["dictionary_indo.dic", "dictionary_playindo.dic", "dictionary_numindo.dic"])                
+dictList = dict(ENGLISH=["dictionary_bible.dic", "dictionary_playback.dic", "dictionary_num.dic"],
+                INDONESIAN=["dictionary_indo.dic", "dictionary_playindo.dic", "dictionary_numindo.dic"])                
                 
